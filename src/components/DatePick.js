@@ -1,52 +1,35 @@
-import React, { useState } from "react";
-import DatePicker from "react-datepicker";
-import moment from "moment";
-import "./DatePick.css";
-import "react-datepicker/dist/react-datepicker.css";
+import * as React from 'react';
 
-function DatePick() {
-  const [checkInDate, setCheckInDate] = useState(null);
-  const [checkOutDate, setCheckOutDate] = useState(null);
+import TextField from '@mui/material/TextField';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Stack } from '@mui/material';
 
-  const handleCheckInDate = (date) => {
-    setCheckInDate(date);
-    setCheckOutDate(null);
-  };
-
-  const handleCheckOutDate = (date) => {
-    setCheckOutDate(date);
-  };
+export default function BasicDatePicker() {
+  const [checkin, setCheckIn] = React.useState(null);
+  const [checkOut, setCheckOut] = React.useState(null);
 
   return (
-    <div className="App">
-      <div className="input-container">
-        <div>
-          <label>Check-in</label>
-          <DatePicker
-            selected={checkInDate}
-            minDate={new Date()}
-            onChange={handleCheckInDate}
-          />
-        </div>
-        <div>
-          <label>Check-out</label>
-          <DatePicker
-            selected={checkOutDate}
-            minDate={checkInDate}
-            onChange={handleCheckOutDate}
-          />
-        </div>
-      </div>
-      {checkInDate && checkOutDate && (
-        <div className="summary">
-          <p>
-            You book a hotel from {moment(checkInDate).format("LL")} to{" "}
-            {moment(checkOutDate).format("LL")}.
-          </p>
-        </div>
-      )}
-    </div>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+     <Stack spacing={3}>
+     <DatePicker
+        label="Check-In"
+        value={checkin}
+        onChange={(newValue) => {
+          setCheckIn(newValue);
+        }}
+        renderInput={(params) => <TextField {...params} />}
+      />
+      <DatePicker
+        label="Check-Out"
+        value={checkOut}
+        onChange={(newValue) => {
+          setCheckOut(newValue);
+        }}
+        renderInput={(params) => <TextField {...params} />}
+      />
+     </Stack>
+    </LocalizationProvider>
   );
 }
-
-export default DatePick;
